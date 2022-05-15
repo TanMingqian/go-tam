@@ -1,0 +1,101 @@
+syntax = "proto3";
+package kratos.api;
+
+option go_package = "github.com/tanmingqian/go-tam/tam-apiserver/internal/conf;conf";
+
+import "google/protobuf/duration.proto";
+
+
+message Bootstrap {
+  Server server = 1;
+  Data data = 2;
+}
+
+message Server {
+  message HTTP {
+    string mode = 1;
+    bool healthz = 2;
+    repeated string middlewares = 3;
+  }
+  message GRPC {
+    string bindAddress = 1;
+    int32 bind_port = 2;
+    int32 max_msg_size = 3;
+  }
+  message InsecureServingOptions {
+    string bind_address = 1;
+    int32 bind_port = 2;
+  }
+  message SecureServingOptions {
+    message ServerCert {
+      message CertKey {
+        string certFile = 1;
+        string keyFile = 2;
+      }
+      CertKey cert_key = 1;
+      string cert_directory = 2;
+      string pair_name = 3;
+    }
+    string bindAddress = 1;
+    int32 bind_port = 2;
+    bool required = 3;
+    ServerCert server_cert = 4;
+  }
+  message FeatureOptions {
+    bool enable_profiling = 1;
+    bool enable_metrics = 2;
+  }
+  message JWT {
+    string realm = 1;
+    string key = 2;
+    google.protobuf.Duration timeout = 3;
+    google.protobuf.Duration max_refresh = 4;
+  }
+  message LOG {
+    repeated string output_paths = 1;
+    repeated string error_output_paths = 2;
+    string level = 3;
+    string format = 4;
+    bool disable_caller = 5;
+    bool disable_stacktrace = 6;
+    bool enable_color = 7;
+    bool development = 8;
+    string name = 9;
+  }
+  HTTP http = 1;
+  GRPC grpc = 2;
+  InsecureServingOptions insecure_serving = 3;
+  SecureServingOptions secure_serving = 4;
+  FeatureOptions feature = 5;
+  JWT jwt = 6;
+  LOG log = 7;
+}
+
+message Data {
+  message MYSQL {
+    string host = 1;
+    string username = 2;
+    string password = 3;
+    string database = 4;
+    int32 max_idle_connections = 5;
+    int32 max_open_connections = 6;
+    google.protobuf.Duration max_connection_life_time = 7;
+    int32 logLevel = 8;
+  }
+  message Redis {
+    string host = 1;
+    int32 port = 2;
+    repeated string addrs = 3;
+    string username = 4;
+    int32 database = 5;
+    string master_name = 6;
+    int32 max_idle = 7;
+    int32 max_active = 8;
+    int32 timeout = 9;
+    bool enable_cluster = 10;
+    bool use_ssl = 11;
+    bool ssl_insecure_skip_verify = 12;
+  }
+  MYSQL database = 1;
+  Redis redis = 2;
+}

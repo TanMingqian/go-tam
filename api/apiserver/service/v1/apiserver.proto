@@ -1,0 +1,104 @@
+syntax = "proto3";
+package apiserver.v1;
+
+option go_package = "github.com/tanmingqian/go-tam/api/apiserver/service/v1;v1";
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+import "google/protobuf/timestamp.proto";
+
+// The greeting service definition.
+service UserService {
+  // Create users
+  rpc CreateUser (CreateUserRequest) returns (CreateUserReply) {
+    option (google.api.http) = {
+      post: "/v1/user"
+      body: "*"
+    };
+  }
+  // Delete user
+  rpc DeleteUser (DeleteUserRequest) returns (DeleteUserReply) {
+    option (google.api.http) = {
+      delete: "/v1/user/{name}"
+    };
+  }
+  // Update user
+  rpc UpdateUser (UpdateUserRequest) returns (UpdateUserReply) {
+    option (google.api.http) = {
+      put: "/v1/user/{user.meta.name}"
+      body: "*"
+    };
+  };
+  // Get User
+  rpc GetUser (GetUserRequest) returns (GetUserReply) {
+    option (google.api.http) = {
+      get: "/v1/user/{name}"
+    };
+  }
+  // List User
+  rpc ListUser (ListUserRequest) returns (ListUserReply) {
+    option (google.api.http) = {
+      get: "/v1/users"
+    };
+  }
+}
+
+message Meta {
+  uint64 ID = 1;
+  string instanceID = 2;
+  string name = 3;
+  string extend = 4;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp updated_at = 6;
+}
+
+message User {
+  Meta meta = 1;
+  int32 status = 2;
+  string nickname = 3;
+  string password = 4;
+  string email = 5;
+  string phone = 6;
+  int32 is_admin = 7;
+  int64 total_policy = 8;
+  google.protobuf.Timestamp logined_at = 9;
+}
+
+// The request message containing the user's name.
+message CreateUserRequest {
+  User user = 1;
+}
+
+// The response message containing the greetings
+message CreateUserReply {
+  User user = 1;
+}
+
+message DeleteUserRequest {
+  string name = 1;
+}
+
+message DeleteUserReply {
+}
+
+message UpdateUserRequest {
+  User user = 1;
+}
+
+message UpdateUserReply {
+  User user = 1;
+}
+
+message GetUserRequest {
+  string name = 1;
+}
+
+message GetUserReply {
+  User user = 1;
+}
+
+message ListUserRequest {
+}
+
+message ListUserReply {
+  repeated User results = 1;
+}
