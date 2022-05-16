@@ -7,8 +7,12 @@ server:
     timeout: 1s
 data:
   database:
-    driver: mysql
-    source: root:root@tcp(127.0.0.1:3306)/test
+    host: 192.168.1.112
+    username: iam
+    password: iam59!z$
+    database: iam
+    max_idle_connections: 10
+    max_open_connections: 10
   redis:
     addr: 127.0.0.1:6379
     read_timeout: 0.2s
