@@ -2,6 +2,7 @@ package biz
 
 import (
 	"context"
+	"github.com/go-kratos/kratos/v2/log"
 	"github.com/tanmingqian/go-tam/pkg/metadata"
 	"time"
 )
@@ -48,4 +49,32 @@ type UserRepo interface {
 	FindByID(ctx context.Context, user *User) (*User, error)
 	ListByUser(ctx context.Context, name string) (*UserList, error)
 	ListAll(ctx context.Context) (*UserList, error)
+}
+
+type UserUseCase struct {
+	repo UserRepo
+	log  *log.Helper
+}
+
+func NewUserUseCase(repo UserRepo, logger log.Logger) *UserUseCase {
+	return &UserUseCase{
+		repo: repo,
+		log:  log.NewHelper(log.With(logger, "module", "usecase/order")),
+	}
+}
+
+func (uc *UserUseCase) Create(ctx context.Context, u *User) (*User, error) {
+	return uc.repo.Save(ctx, u)
+}
+
+func (uc *UserUseCase) Get(ctx context.Context, u *User) (*User, error) {
+	return uc.repo.FindByID(ctx, u)
+}
+
+func (uc *UserUseCase) Update(ctx context.Context, u *User) (*User, error) {
+	return uc.repo.Update(ctx, u)
+}
+
+func (uc *UserUseCase) List(ctx context.Context) (*UserList, error) {
+	return uc.repo.ListAll(ctx)
 }

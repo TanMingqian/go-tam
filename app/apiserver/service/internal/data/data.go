@@ -3,16 +3,17 @@ package data
 import (
 	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/google/wire"
 	"github.com/tanmingqian/go-tam/app/apiserver/service/internal/conf"
+	mysqlRepo "github.com/tanmingqian/go-tam/app/apiserver/service/internal/data/mysql"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-
-	_ "github.com/go-sql-driver/mysql"
+	"time"
 )
 
 // ProviderSet is data providers.
-var ProviderSet = wire.NewSet(NewData, NewGreeterRepo)
+var ProviderSet = wire.NewSet(NewData, NewGreeterRepo, mysqlRepo.NewUserRepo)
 
 // Data .
 type Data struct {
@@ -47,6 +48,17 @@ func NewDB(conf *conf.Data, logger log.Logger) *gorm.DB {
 	if err != nil {
 		log.Fatalf("failed opening connection to mysql: %v", err)
 	}
+
+	sqlDB, err := db.DB()
+	if err != nil {
+		return nil
+	}
+
+	sqlDB.SetMaxOpenConns(int(conf.Database.MaxOpenConnections))
+
+	sqlDB.SetConnMaxLifetime(time.Duration(conf.Database.MaxConnectionLifeTime))
+
+	sqlDB.SetMaxIdleConns(int(conf.Database.MaxIdleConnections))
 
 	if err := db.AutoMigrate(&User{}); err != nil {
 		log.Fatal(err)

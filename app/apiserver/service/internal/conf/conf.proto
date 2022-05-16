@@ -79,7 +79,7 @@ message Data {
     string database = 4;
     int32 max_idle_connections = 5;
     int32 max_open_connections = 6;
-    google.protobuf.Duration max_connection_life_time = 7;
+    int64 max_connection_life_time = 7;
     int32 logLevel = 8;
   }
   message Redis {
