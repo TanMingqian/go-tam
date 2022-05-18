@@ -1,19 +1,18 @@
-package mysql
+package data
 
 import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/tanmingqian/go-tam/app/apiserver/service/internal/biz"
-	"github.com/tanmingqian/go-tam/app/apiserver/service/internal/data"
 )
 
 type userRepo struct {
-	data *data.Data
+	data *Data
 	log  *log.Helper
 }
 
 func (r *userRepo) Save(ctx context.Context, user *biz.User) (*biz.User, error) {
-	u := data.User{
+	u := User{
 		ObjectMeta:  user.ObjectMeta,
 		Status:      user.Status,
 		Nickname:    user.Nickname,
@@ -39,7 +38,7 @@ func (r *userRepo) Save(ctx context.Context, user *biz.User) (*biz.User, error) 
 }
 
 func (r *userRepo) Update(ctx context.Context, user *biz.User) (*biz.User, error) {
-	u := data.User{}
+	u := User{}
 	result := r.data.GetDBIns().WithContext(ctx).First(&u, user.InstanceID)
 	if result.Error != nil {
 		return nil, result.Error
@@ -63,7 +62,7 @@ func (r *userRepo) Update(ctx context.Context, user *biz.User) (*biz.User, error
 }
 
 func (r *userRepo) FindByID(ctx context.Context, user *biz.User) (*biz.User, error) {
-	u := data.User{}
+	u := User{}
 	result := r.data.GetDBIns().WithContext(ctx).First(&u, user.InstanceID)
 	return &biz.User{
 		ObjectMeta:  u.ObjectMeta,
@@ -79,7 +78,7 @@ func (r *userRepo) FindByID(ctx context.Context, user *biz.User) (*biz.User, err
 }
 
 func (r *userRepo) ListByUser(ctx context.Context, name string) (*biz.UserList, error) {
-	var us []data.User
+	var us []User
 	result := r.data.GetDBIns().WithContext(ctx).Find(&us, name)
 	if result.Error != nil {
 		return nil, result.Error
@@ -105,7 +104,7 @@ func (r *userRepo) ListByUser(ctx context.Context, name string) (*biz.UserList, 
 }
 
 func (r *userRepo) ListAll(ctx context.Context) (*biz.UserList, error) {
-	var us []data.User
+	var us []User
 	result := r.data.GetDBIns().WithContext(ctx).Find(&us)
 	if result.Error != nil {
 		return nil, result.Error
@@ -131,7 +130,7 @@ func (r *userRepo) ListAll(ctx context.Context) (*biz.UserList, error) {
 
 }
 
-func NewUserRepo(data *data.Data, logger log.Logger) biz.UserRepo {
+func NewUserRepo(data *Data, logger log.Logger) biz.UserRepo {
 	return &userRepo{
 		data: data,
 		log:  log.NewHelper(log.With(logger, "module", "data/user")),

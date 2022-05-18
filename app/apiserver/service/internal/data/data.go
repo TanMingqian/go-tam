@@ -6,14 +6,13 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/google/wire"
 	"github.com/tanmingqian/go-tam/app/apiserver/service/internal/conf"
-	mysqlRepo "github.com/tanmingqian/go-tam/app/apiserver/service/internal/data/mysql"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"time"
 )
 
 // ProviderSet is data providers.
-var ProviderSet = wire.NewSet(NewData, NewGreeterRepo, mysqlRepo.NewUserRepo)
+var ProviderSet = wire.NewSet(NewData, NewGreeterRepo, NewUserRepo)
 
 // Data .
 type Data struct {

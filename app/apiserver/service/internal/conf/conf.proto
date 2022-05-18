@@ -18,7 +18,7 @@ message Server {
     repeated string middlewares = 3;
   }
   message GRPC {
-    string bindAddress = 1;
+    string bind_address = 1;
     int32 bind_port = 2;
     int32 max_msg_size = 3;
   }

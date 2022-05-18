@@ -1,10 +1,10 @@
 server:
-  http:
-    addr: 0.0.0.0:8000
-    timeout: 1s
   grpc:
-    addr: 0.0.0.0:9000
-    timeout: 1s
+    bind_address: 0.0.0.0
+    bind_port: 9000
+  insecure_serving:
+    bind_address: 0.0.0.0
+    bind_port: 8000
 data:
   database:
     host: 192.168.1.112
