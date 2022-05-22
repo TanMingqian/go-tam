@@ -11,6 +11,39 @@ type userRepo struct {
 	log  *log.Helper
 }
 
+func (r *userRepo) FindByName(ctx context.Context, name string) (*biz.User, error) {
+
+	u := User{}
+	result := r.data.GetDBIns().WithContext(ctx).First(&u, name)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &biz.User{
+		ObjectMeta:  u.ObjectMeta,
+		Status:      u.Status,
+		Nickname:    u.Nickname,
+		Password:    u.Password,
+		Email:       u.Email,
+		Phone:       u.Phone,
+		IsAdmin:     u.IsAdmin,
+		TotalPolicy: u.TotalPolicy,
+		LoginedAt:   u.LoginedAt,
+	}, result.Error
+}
+
+func (r *userRepo) Delete(ctx context.Context, name string) error {
+	u := User{}
+	result := r.data.db.WithContext(ctx).First(&u, name)
+	if result.Error != nil {
+		return result.Error
+	}
+	result = r.data.db.Delete(u)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}
+
 func (r *userRepo) Save(ctx context.Context, user *biz.User) (*biz.User, error) {
 	u := User{
 		ObjectMeta:  user.ObjectMeta,

@@ -7,6 +7,31 @@ info:
     description: The greeting service definition.
     version: 0.0.1
 paths:
+    /v1/login:
+        post:
+            tags:
+                - UserService
+            description: Login
+            operationId: UserService_Login
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/LoginRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/LoginReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /v1/user:
         post:
             tags:
@@ -168,6 +193,20 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/User'
+        LoginReply:
+            type: object
+            properties:
+                token:
+                    type: string
+                expire:
+                    type: string
+        LoginRequest:
+            type: object
+            properties:
+                username:
+                    type: string
+                password:
+                    type: string
         Meta:
             type: object
             properties:

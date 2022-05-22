@@ -16,11 +16,13 @@ message Server {
     string mode = 1;
     bool healthz = 2;
     repeated string middlewares = 3;
+    string addr = 4;
   }
   message GRPC {
     string bind_address = 1;
     int32 bind_port = 2;
     int32 max_msg_size = 3;
+    string addr = 4;
   }
   message InsecureServingOptions {
     string bind_address = 1;

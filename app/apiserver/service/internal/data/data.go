@@ -59,9 +59,11 @@ func NewDB(conf *conf.Data, logger log.Logger) *gorm.DB {
 
 	sqlDB.SetMaxIdleConns(int(conf.Database.MaxIdleConnections))
 
-	if err := db.AutoMigrate(&User{}); err != nil {
-		log.Fatal(err)
-	}
+	/*
+		if err := db.AutoMigrate(&User{}); err != nil {
+			log.Fatal(err)
+		}
+	*/
 	return db
 }
 

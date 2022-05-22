@@ -8,6 +8,13 @@ import "google/protobuf/timestamp.proto";
 
 // The greeting service definition.
 service UserService {
+  // Login
+  rpc Login (LoginRequest) returns (LoginReply) {
+    option (google.api.http) = {
+      post: "/v1/login"
+      body: "*"
+    };
+  }
   // Create users
   rpc CreateUser (CreateUserRequest) returns (CreateUserReply) {
     option (google.api.http) = {
@@ -101,4 +108,14 @@ message ListUserRequest {
 
 message ListUserReply {
   repeated User results = 1;
+}
+
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message LoginReply {
+  string token = 1;
+  string expire = 2;
 }

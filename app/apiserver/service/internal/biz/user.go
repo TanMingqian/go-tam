@@ -47,8 +47,10 @@ type UserRepo interface {
 	Save(ctx context.Context, user *User) (*User, error)
 	Update(ctx context.Context, user *User) (*User, error)
 	FindByID(ctx context.Context, user *User) (*User, error)
+	FindByName(ctx context.Context, name string) (*User, error)
 	ListByUser(ctx context.Context, name string) (*UserList, error)
 	ListAll(ctx context.Context) (*UserList, error)
+	Delete(ctx context.Context, name string) error
 }
 
 type UserUseCase struct {
@@ -67,8 +69,8 @@ func (uc *UserUseCase) Create(ctx context.Context, u *User) (*User, error) {
 	return uc.repo.Save(ctx, u)
 }
 
-func (uc *UserUseCase) Get(ctx context.Context, u *User) (*User, error) {
-	return uc.repo.FindByID(ctx, u)
+func (uc *UserUseCase) Get(ctx context.Context, name string) (*User, error) {
+	return uc.repo.FindByName(ctx, name)
 }
 
 func (uc *UserUseCase) Update(ctx context.Context, u *User) (*User, error) {
@@ -77,4 +79,8 @@ func (uc *UserUseCase) Update(ctx context.Context, u *User) (*User, error) {
 
 func (uc *UserUseCase) List(ctx context.Context) (*UserList, error) {
 	return uc.repo.ListAll(ctx)
+}
+
+func (uc *UserUseCase) Delete(ctx context.Context, name string) error {
+	return uc.repo.Delete(ctx, name)
 }
